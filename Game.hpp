@@ -24,6 +24,7 @@ public:
     bool running(); // check if game is running
 
     static SDL_Renderer* renderer;
+    static SDL_Event event;
 
 
 private:

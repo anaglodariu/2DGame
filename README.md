@@ -1,5 +1,8 @@
 HOW TO MAKE A 2D GAME WITH SDL2
 ===
+## Overview
+Implementing a 2D game in C++ using the SDL2 library.
+
 ## Setup
 - install SDL2
 - install SDL2_image
@@ -19,19 +22,20 @@ HOW TO MAKE A 2D GAME WITH SDL2
   - render
 
 ## TextureManager class
-- drawing textures/sprites to the screen: the birth of **Gorge Gorgeous** 
+- drawing textures/sprites to the screen: the birth of **Gorge Gorgeous**, our main player for now
 
-## GameObject class
-- create player objects
+<!-- ## GameObject class
+- create player objects -->
 
 ## Map class
 - create the map of the game
-
-- create an entity component system
 
 ## Entity Component System (ECS) design pattern
 - we have created 3 classes for this pattern: 
   - Entity: which can have more components
   - Component: which can be added to an entity, and have a reference to the entity
   - Manager: which can manage entities and components
-- we have created the PositionComponent class, which derives from Component class and implements the update and init functions -> which will be used to update the position of the player
+- we have created the PositionComponent class, which derives from the Component class and handles the position of the sprite
+- we have created the SpriteComponent class, which derives from the Compnent class and is responsible for drawing the sprite to the screen and updating the sprite's position
+- we have created the KeyboardController class, which derives from the Component class and handles the keyboard input -> OUR PLAYER CAN MOVE NOW!
+

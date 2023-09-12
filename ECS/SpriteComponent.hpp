@@ -8,7 +8,7 @@ class SpriteComponent : public Component
 {
 private:
     // reference to the position
-    PositionComponent* position;
+    PositionComponent* transform;
     SDL_Texture* texture;
     SDL_Rect srcRect, destRect;
 public:
@@ -28,7 +28,7 @@ public:
         // initialize our rectangles
         // we get the position component by getting the reference to the entity 
         // and then getting the component
-        position = &entity->getComponent<PositionComponent>();
+        transform = &entity->getComponent<PositionComponent>();
 
         srcRect.x = srcRect.y = 0;
         srcRect.w = srcRect.h = 32;
@@ -39,8 +39,8 @@ public:
 
     void update() override {
         // update the position of the sprite
-        destRect.x = position->getXpos();
-        destRect.y = position->getYpos();
+        destRect.x = (int) transform->position.x;
+        destRect.y = (int) transform->position.y;
 
     }
 

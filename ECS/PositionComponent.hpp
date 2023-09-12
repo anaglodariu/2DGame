@@ -2,41 +2,42 @@
 #define POSITIONCOMPONENT_HPP
 #include "ECS.hpp"
 #include "Components.hpp"
+#include "../Vector2D.hpp"
 
+// everything in a struct is public by default
+// evrything in a class is private by default
+// so PositionComponent could be made in a struct
 class PositionComponent : public Component 
 {
-private:
-    int xpos;
-    int ypos;
-
 public:
+    Vector2D position;
+    Vector2D velocity;
 
-    PositionComponent() = default;
+    int speed = 3;
 
-    PositionComponent(int x, int y) {
-        xpos = x;
-        ypos = y;
+    PositionComponent() {
+        position.x = 0.0f;
+        position.y = 0.0f;
     }
 
-    // to get positions
-    int getXpos() { return xpos; }
-    int getYpos() { return ypos; }
 
+    PositionComponent(float x, float y) {
+        position.x = x;
+        position.y = y;
+    }
 
+    void init() override {
 
-    //override the virtual functions
-    // void init() override {
-    //     xpos = 0;
-    //     ypos = 0;
-    // }
+        // at the beginning the velocity is 0
+        velocity.x = 0;
+        velocity.y = 0;
+    }
 
     void update() override {
-        xpos++;
-        ypos++;
+        position.x += velocity.x * speed;
+        position.y += velocity.y * speed;
     }
 
-    // to set positions
-    void setPos(int x, int y) { xpos = x; ypos = y; }
 };
 
 #endif /* PositionComponent_hpp */
