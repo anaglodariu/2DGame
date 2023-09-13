@@ -39,6 +39,12 @@ Map::Map() {
     dest.x = dest.y = 0;
 }
 
+Map::~Map() {
+    SDL_DestroyTexture(stinkyDirt);
+    SDL_DestroyTexture(prettyGrass);
+    SDL_DestroyTexture(clearWater);
+}
+
 void Map::LoadMap(int arr[20][25]) {
     for (int i = 0; i < 20; i++) {
         for (int j = 0; j < 25; j++) {

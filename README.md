@@ -38,4 +38,5 @@ Implementing a 2D game in C++ using the SDL2 library.
 - we have created the PositionComponent class, which derives from the Component class and handles the position of the sprite
 - we have created the SpriteComponent class, which derives from the Compnent class and is responsible for drawing the sprite to the screen and updating the sprite's position
 - we have created the KeyboardController class, which derives from the Component class and handles the keyboard input -> OUR PLAYER CAN MOVE NOW!
+- we have created the ColliderComponent class, which derives from the Component class and handles the collision between entities -> OUR PLAYER CAN'T GO THROUGH THE WALLS NOW! (especially the youShallNotPassWall)
 

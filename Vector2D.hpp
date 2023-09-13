@@ -30,6 +30,10 @@ public:
     Vector2D& operator*=(const Vector2D& vec);
     Vector2D& operator/=(const Vector2D& vec);
 
+    Vector2D& operator*(const int& i); // when we scale a vector
+
+    Vector2D& zero(); // we initialize the vector to 0
+
     friend ostream& operator<<(ostream& stream, const Vector2D& vec);
 
 };

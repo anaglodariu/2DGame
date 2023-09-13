@@ -13,11 +13,19 @@ public:
     Vector2D position;
     Vector2D velocity;
 
+    int height = 32;
+    int width = 32;
+    int scale = 1;
+
     int speed = 3;
 
     PositionComponent() {
-        position.x = 0.0f;
-        position.y = 0.0f;
+        position.zero();
+    }
+
+    PositionComponent(int sc) {
+        position.zero();
+        scale = sc;
     }
 
 
@@ -26,11 +34,18 @@ public:
         position.y = y;
     }
 
+    PositionComponent(float x, float y, int w, int h, int sc) {
+        position.x = x;
+        position.y = y;
+        width = w;
+        height = h;
+        scale = sc;
+    }
+
     void init() override {
 
         // at the beginning the velocity is 0
-        velocity.x = 0;
-        velocity.y = 0;
+        velocity.zero();
     }
 
     void update() override {

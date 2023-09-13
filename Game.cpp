@@ -4,6 +4,7 @@
 #include "Map.hpp"
 #include "ECS/Components.hpp"
 #include "Vector2D.hpp"
+#include "Collision.hpp"
 
 // GameObject* player;
 Map* map;
@@ -12,6 +13,7 @@ SDL_Renderer* Game::renderer = nullptr;
 Manager manager;
 // create a reference to the new player entity
 auto& newPlayer(manager.addEntity());
+auto& youShallNotPassWall(manager.addEntity());
 
 SDL_Event Game::event; // one instance of the event by making it static
 
@@ -53,11 +55,17 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
     // player = new GameObject("assets/gorge.png", 0, 0);
     map = new Map();
 
-
-    newPlayer.addComponent<PositionComponent>(0, 0);
+    // introduce our main player
+    newPlayer.addComponent<PositionComponent>(2);
     newPlayer.addComponent<SpriteComponent>("assets/gorge.png");
     newPlayer.addComponent<KeyboardController>();
     //newPlayer.getComponent<PositionComponent>().setPos(500, 200);
+    newPlayer.addComponent<ColliderComponent>("player");
+
+    // introduce our wall to the player
+    youShallNotPassWall.addComponent<PositionComponent>(300.0f, 300.0f, 20, 300, 1);
+    youShallNotPassWall.addComponent<SpriteComponent>("assets/dirt.png");
+    youShallNotPassWall.addComponent<ColliderComponent>("wall");
 
 }
 
@@ -81,6 +89,11 @@ void Game::update()
     // player->update();
     manager.refresh();
     manager.update();
+
+    if (Collision::AABB(newPlayer.getComponent<ColliderComponent>().collider, youShallNotPassWall.getComponent<ColliderComponent>().collider)) {
+        newPlayer.getComponent<PositionComponent>().velocity * -1;
+        cout << "You shall not pass!" << endl;
+    }
     
     //ewPlayer.getComponent<PositionComponent>().position.add(Vector2D(0,5));
     cout << newPlayer.getComponent<PositionComponent>().position.x << ", " << newPlayer.getComponent<PositionComponent>().position.y << endl;
