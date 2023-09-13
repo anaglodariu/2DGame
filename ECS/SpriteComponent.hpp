@@ -14,7 +14,7 @@ private:
     SDL_Rect srcRect, destRect;
 public:
     SpriteComponent() = default;
-    // path to the twxture that we use
+    // path to the texture that we use
     SpriteComponent(const char* path) {
         // load the texture
         setTexture(path);

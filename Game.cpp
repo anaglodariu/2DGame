@@ -16,6 +16,7 @@ auto& newPlayer(manager.addEntity());
 auto& youShallNotPassWall(manager.addEntity());
 
 SDL_Event Game::event; // one instance of the event by making it static
+vector<ColliderComponent*> Game::colliders;
 
 Game::Game() 
 {

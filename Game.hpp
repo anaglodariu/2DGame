@@ -2,10 +2,14 @@
 #define GAME_HPP
 
 #include <iostream>
+#include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+// #include "ECS/ColliderComponent.hpp"
 
 using namespace std;
+
+class ColliderComponent;
 
 
 class Game {
@@ -25,6 +29,7 @@ public:
 
     static SDL_Renderer* renderer;
     static SDL_Event event;
+    static vector<ColliderComponent*> colliders;
 
 
 private:
