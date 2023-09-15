@@ -12,7 +12,7 @@ public:
 
     SDL_Rect tileRect;
     int tileID;
-    char *path; // for the texture loader
+    const char *path; // for the texture loader
 
     TileComponent() = default;
 

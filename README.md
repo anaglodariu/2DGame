@@ -39,7 +39,7 @@ Implementing a 2D game in C++ using the SDL2 library.
 - we have created the **SpriteComponent class**, which derives from the Compnent class and is responsible for drawing the sprite to the screen and updating the sprite's position
 - we have created the **KeyboardController class**, which derives from the Component class and handles the keyboard input -> OUR PLAYER CAN MOVE NOW!
 - we have created the **ColliderComponent class**, which derives from the Component class and handles the collision between entities -> OUR PLAYER CAN'T GO THROUGH THE WALLS NOW! (especially the youShallNotPassWall)
-- we have created the **TileComponent class**, which derives from the Component class and handles the tiles of the map
+- we have created the **TileComponent class**, which derives from the Component class and handles the tiles of the map (tiles for grass, water, dirt)
 
 
 ## Collision detection
@@ -47,4 +47,6 @@ Implementing a 2D game in C++ using the SDL2 library.
 - we have used the simple AABB collision detection algorithm (Axis-Aligned Bounding Box)
 
 We have used to concept of _forward declaration_ in order to avoid _circular dependencies between classes_.
+
+## Parsing external Map/Level files
 

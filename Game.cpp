@@ -15,6 +15,10 @@ Manager manager;
 auto& newPlayer(manager.addEntity());
 auto& youShallNotPassWall(manager.addEntity());
 
+// auto& tile0(manager.addEntity());
+// auto& tile1(manager.addEntity());
+// auto& tile2(manager.addEntity());
+
 SDL_Event Game::event; // one instance of the event by making it static
 vector<ColliderComponent*> Game::colliders;
 
@@ -56,6 +60,14 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
     // player = new GameObject("assets/gorge.png", 0, 0);
     map = new Map();
 
+    // tile0.addComponent<TileComponent>(200, 200, 32, 32, 0); //dirt
+    // tile1.addComponent<TileComponent>(250, 250, 32, 32, 1); //grass
+    // tile2.addComponent<TileComponent>(200, 250, 32, 32, 2); //water
+
+    // tile0.addComponent<ColliderComponent>("dirt");
+    // tile1.addComponent<ColliderComponent>("grass");
+
+
     // introduce our main player
     newPlayer.addComponent<PositionComponent>(2);
     newPlayer.addComponent<SpriteComponent>("assets/gorge.png");
@@ -91,6 +103,11 @@ void Game::update()
     manager.refresh();
     manager.update();
 
+    // loop through all colliders
+    for (auto cc : colliders) {
+        Collision::AABB(newPlayer.getComponent<ColliderComponent>(), *cc);
+    }
+
     if (Collision::AABB(newPlayer.getComponent<ColliderComponent>().collider, youShallNotPassWall.getComponent<ColliderComponent>().collider)) {
         newPlayer.getComponent<PositionComponent>().velocity * -1;
         cout << "You shall not pass!" << endl;
@@ -104,7 +121,7 @@ void Game::update()
 void Game::render()
 {
     SDL_RenderClear(renderer);
-    map->DrawMap();
+    // map->DrawMap();
     // this is where we would add stuff to render
     // player->render(); // place our dear Gorge on the screen
     manager.draw();
@@ -122,6 +139,12 @@ void Game::clean()
 bool Game::running()
 {
     return isRunning;
+}
+
+
+void Game::addTile(int id, int x, int y) {
+    auto& tile(manager.addEntity());
+    tile.addComponent<TileComponent>(x, y, 32, 32, id);
 }
 
 // Path: Game.cpp

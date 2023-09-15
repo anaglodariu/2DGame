@@ -5,12 +5,10 @@
 #include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-// #include "ECS/ColliderComponent.hpp"
 
 using namespace std;
 
-class ColliderComponent;
-
+class ColliderComponent; // forward declaration to avoid circular dependency
 
 class Game {
 
@@ -27,6 +25,7 @@ public:
 
     bool running(); // check if game is running
 
+    static void addTile(int id, int x, int y); // add a tile to the game
     static SDL_Renderer* renderer;
     static SDL_Event event;
     static vector<ColliderComponent*> colliders;

@@ -3,24 +3,16 @@
 
 #include "Game.hpp"
 
+using namespace std;
+
 class Map {
 public:
     Map();
     ~Map();
 
-    void LoadMap(int arr[20][25]);
-    void DrawMap();
-
+    void LoadMap(string path, int sizeX, int sizeY);
 
 private:
-    SDL_Rect src, dest;
-
-    SDL_Texture* stinkyDirt;
-    SDL_Texture* prettyGrass;
-    SDL_Texture* clearWater;
-
-    int map[20][25];
-
 
 };
 
