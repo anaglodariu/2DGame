@@ -10,7 +10,7 @@ public:
     Map();
     ~Map();
 
-    void LoadMap(string path, int sizeX, int sizeY);
+    static void LoadMap(string path, int sizeX, int sizeY);
 
 private:
 

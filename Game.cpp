@@ -66,6 +66,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 
     // tile0.addComponent<ColliderComponent>("dirt");
     // tile1.addComponent<ColliderComponent>("grass");
+    Map::LoadMap("assets/tiles16x16.map", 16, 16);
 
 
     // introduce our main player

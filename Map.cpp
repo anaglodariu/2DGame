@@ -49,8 +49,6 @@ void Map::LoadMap(string path, int sizeX, int sizeY) {
         }
     }
 
-
-
     mapFile.close();
 }
     
