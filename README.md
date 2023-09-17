@@ -48,14 +48,14 @@ Implementing a 2D game in C++ using the SDL2 library.
 We have used to concept of _forward declaration_ in order to avoid _circular dependencies between classes_.
 
 ## Parsing external Map/Level files
-- _failure in using Gimp to create the map_, so we have a simple text file
-in which we **"designed"** the map with the help of 0, 1, 2 characters
+- _failure in using Gimp to create the map_, so we have a simple text file ("assets/tiles16x16.map") in which we **"designed"** the map with the help of 0, 1, 2 characters
 - 0 is for dirt
 - 1 is for grass
 - 2 is for water
 - the size of the map is 16x16 tiles, each tile being 32x32 pixels
 
 ## Rendering Layers and Grouping entities together
-
-
+- in order to solve the rendering problem (the map was drawn over the player), we
+add each entity to a **specific** group, and then we render the groups in the preferred 
+order
 

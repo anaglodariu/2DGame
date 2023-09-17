@@ -6,21 +6,39 @@
 #include "Vector2D.hpp"
 #include "Collision.hpp"
 
+using namespace std;
+
 // GameObject* player;
 Map* map;
+Manager manager;
 
 SDL_Renderer* Game::renderer = nullptr;
-Manager manager;
+SDL_Event Game::event; // one instance of the event by making it static
+vector<ColliderComponent*> Game::colliders;
+
+
 // create a reference to the new player entity
 auto& newPlayer(manager.addEntity());
 auto& youShallNotPassWall(manager.addEntity());
+
+
+// clearly defining our groups with labels
+enum groupLabels : size_t {
+    groupMap,
+    groupPlayers,
+    groupEnemies,
+    groupColliders
+};
+
+
+
+
 
 // auto& tile0(manager.addEntity());
 // auto& tile1(manager.addEntity());
 // auto& tile2(manager.addEntity());
 
-SDL_Event Game::event; // one instance of the event by making it static
-vector<ColliderComponent*> Game::colliders;
+
 
 Game::Game() 
 {
@@ -75,18 +93,21 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
     newPlayer.addComponent<KeyboardController>();
     //newPlayer.getComponent<PositionComponent>().setPos(500, 200);
     newPlayer.addComponent<ColliderComponent>("player");
+    // add entity to a group
+    newPlayer.addGroup(groupPlayers);
+
 
     // introduce our wall to the player
     youShallNotPassWall.addComponent<PositionComponent>(300.0f, 300.0f, 20, 300, 1);
     youShallNotPassWall.addComponent<SpriteComponent>("assets/dirt.png");
     youShallNotPassWall.addComponent<ColliderComponent>("wall");
+    // add entity to a group
+    youShallNotPassWall.addGroup(groupMap);
 
 }
 
 
-void Game::handleEvents()
-{
-    
+void Game::handleEvents() {
     SDL_PollEvent(&event);
     switch (event.type) {
         case SDL_QUIT:
@@ -95,11 +116,9 @@ void Game::handleEvents()
         default:
             break;
     }
-
 }
 
-void Game::update()
-{
+void Game::update() {
     // player->update();
     manager.refresh();
     manager.update();
@@ -119,33 +138,52 @@ void Game::update()
    
 }
 
-void Game::render()
-{
+// a reference to all the tiles in the specified group
+auto& tiles(manager.getGroup(groupMap));
+// a reference to all the players in the specified group
+auto& players(manager.getGroup(groupPlayers));
+// a reference to all the enemies in the specified group
+auto& enemies(manager.getGroup(groupEnemies));
+
+void Game::render() {
     SDL_RenderClear(renderer);
     // map->DrawMap();
     // this is where we would add stuff to render
     // player->render(); // place our dear Gorge on the screen
-    manager.draw();
+    // manager.draw();
+
+    // we will render all the entities in the order we want
+    for (auto& t : tiles) 
+        t->draw();
+    
+    for (auto& p : players) 
+        p->draw();
+    
+    for (auto& e : enemies) 
+        e->draw();
+
     SDL_RenderPresent(renderer);
 }
 
-void Game::clean()
-{
+void Game::clean() {
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
     cout << "Game cleaned!" << endl;
 }
 
-bool Game::running()
-{
+bool Game::running() {
     return isRunning;
 }
 
 
 void Game::addTile(int id, int x, int y) {
+    // tile is not a copy of the returned entity but is directly referring to 
+    // the same enity returned by the addEntity() function
     auto& tile(manager.addEntity());
     tile.addComponent<TileComponent>(x, y, 32, 32, id);
+    // add tile to a group
+    tile.addGroup(groupMap);
 }
 
 // Path: Game.cpp

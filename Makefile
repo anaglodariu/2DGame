@@ -2,8 +2,8 @@ CC = g++
 CFLAGS = -Wall -g
 LDFLAGS = -lSDL2 -lSDL2_image
 
-game: main.o Game.o TextureManager.o Map.o Vector2D.o Collision.o
-	$(CC) $(CFLAGS) -o game main.o Game.o TextureManager.o Map.o Vector2D.o Collision.o $(LDFLAGS)
+game: main.o Game.o TextureManager.o Map.o Vector2D.o Collision.o ECS/ECS.o
+	$(CC) $(CFLAGS) -o game main.o Game.o TextureManager.o Map.o Vector2D.o Collision.o ECS/ECS.o $(LDFLAGS)
 
 main.o: main.cpp Game.hpp TextureManager.hpp Map.hpp ECS/Components.hpp Vector2D.hpp Collision.hpp
 	$(CC) $(CFLAGS) -c main.cpp
@@ -18,6 +18,8 @@ Vector2D.o: Vector2D.cpp Vector2D.hpp
 
 Collision.o: Collision.cpp Collision.hpp
 
+ECS/ECS.o: ECS/ECS.cpp ECS/ECS.hpp
+
 clean:
-	rm -f *.o game
+	rm -f *.o game ECS/*.o
 
