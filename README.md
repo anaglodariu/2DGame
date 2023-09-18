@@ -59,3 +59,11 @@ We have used to concept of _forward declaration_ in order to avoid _circular dep
 add each entity to a **specific** group, and then we render the groups in the preferred 
 order
 
+# Making my first sprite sheet
+- we have created a **sprite sheet** for Fernando, red-haired daddy
+- the sprite sheet has **4 frames**
+- each frame has 32x32 pixels and it was done in Gimp
+- we put all the frames together in Paint
+- because Paint makes the background white, _we made it transparent using_
+_a python script: alpha.py (see the script in the assets folder)_
+

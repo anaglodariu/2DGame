@@ -12,11 +12,26 @@ private:
     PositionComponent* transform;
     SDL_Texture* texture;
     SDL_Rect srcRect, destRect;
+
+    bool animated = false;
+    int frames = 0;
+    // delay between frames in ms
+    int speed = 100; // in ms
+
 public:
     SpriteComponent() = default;
+
     // path to the texture that we use
     SpriteComponent(const char* path) {
         // load the texture
+        setTexture(path);
+    }
+
+    // when this constructor is called we'll know that we want an animated sprite
+    SpriteComponent(const char* path, int nFrames, int mSpeed) {
+        animated = true;
+        frames = nFrames;
+        speed = mSpeed;
         setTexture(path);
     }
 
@@ -43,6 +58,11 @@ public:
     }
 
     void update() override {
+        if (animated == true) {
+            srcRect.x = srcRect.w * static_cast<int>((SDL_GetTicks() / speed) % frames);    
+        }
+
+
         // update the position of the sprite
         destRect.x = static_cast<int>(transform->position.x);
         destRect.y = static_cast<int>(transform->position.y);

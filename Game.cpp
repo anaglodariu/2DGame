@@ -89,7 +89,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 
     // introduce our main player
     newPlayer.addComponent<PositionComponent>(2);
-    newPlayer.addComponent<SpriteComponent>("assets/gorge.png");
+    newPlayer.addComponent<SpriteComponent>("assets/player_idle.png", 4, 100);
     newPlayer.addComponent<KeyboardController>();
     //newPlayer.getComponent<PositionComponent>().setPos(500, 200);
     newPlayer.addComponent<ColliderComponent>("player");
