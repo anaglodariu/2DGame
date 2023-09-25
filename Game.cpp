@@ -76,7 +76,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
     }
 
     // player = new GameObject("assets/gorge.png", 0, 0);
-    map = new Map();
+    //map = new Map();
 
     // tile0.addComponent<TileComponent>(200, 200, 32, 32, 0); //dirt
     // tile1.addComponent<TileComponent>(250, 250, 32, 32, 1); //grass
@@ -89,7 +89,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 
     // introduce our main player
     newPlayer.addComponent<PositionComponent>(2);
-    newPlayer.addComponent<SpriteComponent>("assets/player_idle.png", 4, 100);
+    newPlayer.addComponent<SpriteComponent>("assets/player_anims.png", true);
     newPlayer.addComponent<KeyboardController>();
     //newPlayer.getComponent<PositionComponent>().setPos(500, 200);
     newPlayer.addComponent<ColliderComponent>("player");

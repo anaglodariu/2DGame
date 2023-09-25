@@ -5,7 +5,7 @@ LDFLAGS = -lSDL2 -lSDL2_image
 game: main.o Game.o TextureManager.o Map.o Vector2D.o Collision.o ECS/ECS.o
 	$(CC) $(CFLAGS) -o game main.o Game.o TextureManager.o Map.o Vector2D.o Collision.o ECS/ECS.o $(LDFLAGS)
 
-main.o: main.cpp Game.hpp TextureManager.hpp Map.hpp ECS/Components.hpp Vector2D.hpp Collision.hpp
+main.o: *.hpp ECS/*.hpp
 	$(CC) $(CFLAGS) -c main.cpp
 
 Game.o: Game.cpp Game.hpp
