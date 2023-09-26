@@ -24,7 +24,10 @@ public:
     }
 
     PositionComponent(int sc) {
-        position.zero();
+        // position.zero();
+        // put the player in the middle of the screen
+        position.x = 400;
+        position.y = 320;
         scale = sc;
     }
 

@@ -67,3 +67,18 @@ order
 - because Paint makes the background white, _we made it transparent using_
 _a python script: alpha.py (see the script in the assets folder)_
 
+# Making multiple animations
+- we have created a **Animation struct** which holds the information about the animation
+- we have a sprite sheet for idle and walking animations, each on different rows
+- we use _RenderCopyEx_ instead of RenderCopy in order to flip the texture horizontally when the player is moving left
+
+# Tile Map
+- we have a sprite sheet with all the tiles used for the map; it has a width of
+10 tiles and a height of 3 tiles, each tile being 32x32 pixels
+- the width was made 10 in order to identify the tiles easier, based on their
+row and column indexes and create the map in a text file
+
+# Camera
+- we create a camera object which will be a SDL_Rect object the size of our screen
+- the tile map is scaled up 2 times
+

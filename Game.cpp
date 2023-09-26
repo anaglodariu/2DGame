@@ -16,10 +16,16 @@ SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event; // one instance of the event by making it static
 vector<ColliderComponent*> Game::colliders;
 
+SDL_Rect Game::camera = {0, 0, 800, 640};
+
+bool Game::isRunning = false;
 
 // create a reference to the new player entity
 auto& newPlayer(manager.addEntity());
-auto& youShallNotPassWall(manager.addEntity());
+// auto& youShallNotPassWall(manager.addEntity());
+
+// where the map file is located
+const char *mapFile = "assets/terrain_ss.png";
 
 
 // clearly defining our groups with labels
@@ -30,15 +36,12 @@ enum groupLabels : size_t {
     groupColliders
 };
 
-
-
-
-
-// auto& tile0(manager.addEntity());
-// auto& tile1(manager.addEntity());
-// auto& tile2(manager.addEntity());
-
-
+// a reference to all the tiles in the specified group
+auto& tiles(manager.getGroup(groupMap));
+// a reference to all the players in the specified group
+auto& players(manager.getGroup(groupPlayers));
+// a reference to all the enemies in the specified group
+auto& enemies(manager.getGroup(groupEnemies));
 
 Game::Game() 
 {
@@ -75,20 +78,11 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
         isRunning = false;
     }
 
-    // player = new GameObject("assets/gorge.png", 0, 0);
-    //map = new Map();
-
-    // tile0.addComponent<TileComponent>(200, 200, 32, 32, 0); //dirt
-    // tile1.addComponent<TileComponent>(250, 250, 32, 32, 1); //grass
-    // tile2.addComponent<TileComponent>(200, 250, 32, 32, 2); //water
-
-    // tile0.addComponent<ColliderComponent>("dirt");
-    // tile1.addComponent<ColliderComponent>("grass");
-    Map::LoadMap("assets/tiles16x16.map", 16, 16);
+    Map::LoadMap("assets/map.map", 25, 20);
 
 
     // introduce our main player
-    newPlayer.addComponent<PositionComponent>(2);
+    newPlayer.addComponent<PositionComponent>(4);
     newPlayer.addComponent<SpriteComponent>("assets/player_anims.png", true);
     newPlayer.addComponent<KeyboardController>();
     //newPlayer.getComponent<PositionComponent>().setPos(500, 200);
@@ -96,16 +90,14 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
     // add entity to a group
     newPlayer.addGroup(groupPlayers);
 
-
-    // introduce our wall to the player
-    youShallNotPassWall.addComponent<PositionComponent>(300.0f, 300.0f, 20, 300, 1);
-    youShallNotPassWall.addComponent<SpriteComponent>("assets/dirt.png");
-    youShallNotPassWall.addComponent<ColliderComponent>("wall");
-    // add entity to a group
-    youShallNotPassWall.addGroup(groupMap);
+    // // introduce our wall to the player
+    // youShallNotPassWall.addComponent<PositionComponent>(300.0f, 300.0f, 20, 300, 1);
+    // youShallNotPassWall.addComponent<SpriteComponent>("assets/dirt.png");
+    // youShallNotPassWall.addComponent<ColliderComponent>("wall");
+    // // add entity to a group
+    // youShallNotPassWall.addGroup(groupMap);
 
 }
-
 
 void Game::handleEvents() {
     SDL_PollEvent(&event);
@@ -123,27 +115,43 @@ void Game::update() {
     manager.refresh();
     manager.update();
 
-    // loop through all colliders
-    for (auto cc : colliders) {
-        Collision::AABB(newPlayer.getComponent<ColliderComponent>(), *cc);
-    }
+    camera.x = newPlayer.getComponent<PositionComponent>().position.x - 400;
+    camera.y = newPlayer.getComponent<PositionComponent>().position.y - 320;
 
-    if (Collision::AABB(newPlayer.getComponent<ColliderComponent>().collider, youShallNotPassWall.getComponent<ColliderComponent>().collider)) {
-        newPlayer.getComponent<PositionComponent>().velocity * -1;
-        cout << "You shall not pass!" << endl;
-    }
+    // check the bounds of our camera
+    if (camera.x < 0)
+        camera.x = 0;
+    if (camera.y < 0)
+        camera.y = 0;
+    if (camera.x > camera.w)
+        camera.x = camera.w;
+    if (camera.y > camera.h)
+        camera.y = camera.h;
+
+    // Vector2D playerVel = newPlayer.getComponent<PositionComponent>().velocity;
+    // // how fast we should shift the background
+    // int playerSpeed = newPlayer.getComponent<PositionComponent>().speed;
+
+    // for (auto t : tiles) {
+    //     t->getComponent<TileComponent>().destRect.x += -(playerVel.x * playerSpeed);
+    //     t->getComponent<TileComponent>().destRect.y += -(playerVel.y * playerSpeed);
+    // }
+
+    // loop through all colliders
+    // for (auto cc : colliders) {
+    //     Collision::AABB(newPlayer.getComponent<ColliderComponent>(), *cc);
+    // }
+
+    // if (Collision::AABB(newPlayer.getComponent<ColliderComponent>().collider, youShallNotPassWall.getComponent<ColliderComponent>().collider)) {
+    //     newPlayer.getComponent<PositionComponent>().velocity * -1;
+    //     cout << "You shall not pass!" << endl;
+    // }
     
     //ewPlayer.getComponent<PositionComponent>().position.add(Vector2D(0,5));
     cout << newPlayer.getComponent<PositionComponent>().position.x << ", " << newPlayer.getComponent<PositionComponent>().position.y << endl;
    
 }
 
-// a reference to all the tiles in the specified group
-auto& tiles(manager.getGroup(groupMap));
-// a reference to all the players in the specified group
-auto& players(manager.getGroup(groupPlayers));
-// a reference to all the enemies in the specified group
-auto& enemies(manager.getGroup(groupEnemies));
 
 void Game::render() {
     SDL_RenderClear(renderer);
@@ -177,11 +185,11 @@ bool Game::running() {
 }
 
 
-void Game::addTile(int id, int x, int y) {
+void Game::addTile(int srcX, int srcY, int x, int y) {
     // tile is not a copy of the returned entity but is directly referring to 
-    // the same enity returned by the addEntity() function
+    // the same entity returned by the addEntity() function
     auto& tile(manager.addEntity());
-    tile.addComponent<TileComponent>(x, y, 32, 32, id);
+    tile.addComponent<TileComponent>(srcX, srcY, x, y, mapFile);
     // add tile to a group
     tile.addGroup(groupMap);
 }

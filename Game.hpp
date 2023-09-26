@@ -25,15 +25,15 @@ public:
 
     bool running(); // check if game is running
 
-    static void addTile(int id, int x, int y); // add a tile to the game
+    static void addTile(int srcX, int srcY, int x, int y); // add a tile to the game
     static SDL_Renderer* renderer;
     static SDL_Event event;
     static vector<ColliderComponent*> colliders;
-
+    static bool isRunning;
+    static SDL_Rect camera;
 
 private:
     int cnt = 0;
-    bool isRunning;
     SDL_Window* window;
 };
 
