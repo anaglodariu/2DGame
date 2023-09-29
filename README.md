@@ -82,3 +82,7 @@ row and column indexes and create the map in a text file
 - we create a camera object which will be a SDL_Rect object the size of our screen
 - the tile map is scaled up 2 times
 
+# Colliders
+- we have added colliders to the map so that the player does not go
+through water
+- the colliders are rendered on top of the tiles of the map

@@ -1,6 +1,5 @@
 #include "Game.hpp"
 #include "TextureManager.hpp"
-// #include "GameObject.hpp"
 #include "Map.hpp"
 #include "ECS/Components.hpp"
 #include "Vector2D.hpp"
@@ -9,12 +8,12 @@
 using namespace std;
 
 // GameObject* player;
-Map* map;
+Map *maap;
 Manager manager;
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event; // one instance of the event by making it static
-vector<ColliderComponent*> Game::colliders;
+// vector<ColliderComponent*> Game::colliders;
 
 SDL_Rect Game::camera = {0, 0, 800, 640};
 
@@ -25,23 +24,8 @@ auto& newPlayer(manager.addEntity());
 // auto& youShallNotPassWall(manager.addEntity());
 
 // where the map file is located
-const char *mapFile = "assets/terrain_ss.png";
+// const char *mapFile = "assets/terrain_ss.png";
 
-
-// clearly defining our groups with labels
-enum groupLabels : size_t {
-    groupMap,
-    groupPlayers,
-    groupEnemies,
-    groupColliders
-};
-
-// a reference to all the tiles in the specified group
-auto& tiles(manager.getGroup(groupMap));
-// a reference to all the players in the specified group
-auto& players(manager.getGroup(groupPlayers));
-// a reference to all the enemies in the specified group
-auto& enemies(manager.getGroup(groupEnemies));
 
 Game::Game() 
 {
@@ -78,8 +62,8 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
         isRunning = false;
     }
 
-    Map::LoadMap("assets/map.map", 25, 20);
-
+    maap = new Map("assets/terrain_ss.png", 2, 32);
+    maap->LoadMap("assets/map.map", 25, 20);
 
     // introduce our main player
     newPlayer.addComponent<PositionComponent>(4);
@@ -89,15 +73,13 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
     newPlayer.addComponent<ColliderComponent>("player");
     // add entity to a group
     newPlayer.addGroup(groupPlayers);
-
-    // // introduce our wall to the player
-    // youShallNotPassWall.addComponent<PositionComponent>(300.0f, 300.0f, 20, 300, 1);
-    // youShallNotPassWall.addComponent<SpriteComponent>("assets/dirt.png");
-    // youShallNotPassWall.addComponent<ColliderComponent>("wall");
-    // // add entity to a group
-    // youShallNotPassWall.addGroup(groupMap);
-
 }
+
+// a reference to all the tiles in the specified group
+auto& tiles(manager.getGroup(Game::groupMap));
+// a reference to all the players in the specified group
+auto& players(manager.getGroup(Game::groupPlayers));
+auto& colliders(manager.getGroup(Game::groupColliders));
 
 void Game::handleEvents() {
     SDL_PollEvent(&event);
@@ -111,9 +93,19 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
-    // player->update();
+    SDL_Rect playerCol = newPlayer.getComponent<ColliderComponent>().collider;
+    Vector2D playerPos = newPlayer.getComponent<PositionComponent>().position;
+
     manager.refresh();
     manager.update();
+
+    for (auto& c : colliders) {
+        SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
+        if (Collision::AABB(cCol, playerCol)) {
+            // we force the player to the last position he was in
+            newPlayer.getComponent<PositionComponent>().position = playerPos;
+        }
+    }
 
     camera.x = newPlayer.getComponent<PositionComponent>().position.x - 400;
     camera.y = newPlayer.getComponent<PositionComponent>().position.y - 320;
@@ -161,14 +153,14 @@ void Game::render() {
     // manager.draw();
 
     // we will render all the entities in the order we want
-    for (auto& t : tiles) 
+    for (auto& t : tiles)
         t->draw();
+    
+    for (auto& c : colliders)
+        c->draw();
     
     for (auto& p : players) 
         p->draw();
-    
-    for (auto& e : enemies) 
-        e->draw();
 
     SDL_RenderPresent(renderer);
 }
@@ -182,16 +174,6 @@ void Game::clean() {
 
 bool Game::running() {
     return isRunning;
-}
-
-
-void Game::addTile(int srcX, int srcY, int x, int y) {
-    // tile is not a copy of the returned entity but is directly referring to 
-    // the same entity returned by the addEntity() function
-    auto& tile(manager.addEntity());
-    tile.addComponent<TileComponent>(srcX, srcY, x, y, mapFile);
-    // add tile to a group
-    tile.addGroup(groupMap);
 }
 
 // Path: Game.cpp

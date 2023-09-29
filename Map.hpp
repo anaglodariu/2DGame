@@ -7,13 +7,17 @@ using namespace std;
 
 class Map {
 public:
-    Map();
+    Map(const char *mapFilePath, int mapScale, int tileSize); 
     ~Map();
 
-    static void LoadMap(string path, int sizeX, int sizeY);
+    void AddTile(int srcX, int srcY, int x, int y); // add a tile to the game
+    void LoadMap(string path, int sizeX, int sizeY);
 
 private:
-
+    const char *mapFilePath;
+    int mapScale;
+    int tileSize;
+    int scaledSize;
 };
 
 #endif /* Map_hpp */
